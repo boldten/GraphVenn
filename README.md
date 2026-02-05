@@ -82,14 +82,14 @@ python GraphVenn.py --csv <path_to_csv_file> --city <city_name> [other options..
 
 ### Optional Parameters
 
-| Argument                 | Default   | Description 
-|--------------------------|-----------|-------------
-| `--strategy			`  | `'greedy'`| Search strategy, either `greedy` or `optimal`.
-| `--N` 				   | `100`     | Only consider top N positions with most crimes. Use `-1` to include all.
-| `--d`    				   | `100`     | Hotspot radius in meters.
-| `--p`				       | `4`       | Spatial resolution in terms of number of coordinate decimals.
-| `--min_cluster_size`     | `1`       | Minimum number of crimes required at a location to be considered.
-| `--verbose`              | `1`       | Verbosity level: `0` = minimal, `1` = progress info, `2` = debug details.
+| Argument             | Default   | Description 
+|----------------------|-----------|-------------
+| `--strategy`		   | `'greedy'`| Search strategy, either `greedy` or `optimal`.
+| `--N` 			   | `100`     | Only consider top N positions with most crimes. Use `-1` to include all.
+| `--d`    			   | `100`     | Hotspot radius in meters.
+| `--p`			       | `4`       | Spatial resolution in terms of number of coordinate decimals.
+| `--min_cluster_size` | `1`       | Minimum number of crimes required at a location to be considered.
+| `--verbose`          | `1`       | Verbosity level: `0` = minimal, `1` = progress info, `2` = debug details.
 
 Run with default values and synthetic example data in directory ./Data:
 
@@ -118,6 +118,34 @@ The program takes one argument that should be the path to a CSV file, comma (,)s
 - year: integer values representing the year when the crime occurred, e.g., 2025
 - latitude:  floating point values representing latitude coordinates, e.g., 55.6050 (note the dot, not a comma)
 - longitude: floating point values representing longitude coordinates, e.g., 13.1075
+
+---
+
+## Output format
+
+GraphVenn stores detected hotspot results as CSV files in the `Results/` directory.
+
+Each row corresponds to *one hotspot candidate*, in descending order:
+- Row 1 contains the *best-ranked* hotspot.
+- Subsequent rows list hotspots in decreasing order of importance.
+
+### CSV columns
+
+| Column name   | Description |
+|---------------|-------------|
+| `rank`        | Rank of the hotspot (1 = best). |
+| `crime_count` | Number of crimes associated with the hotspot location. |
+| `latitude`    | Latitude of the hotspot center (decimal degrees). |
+| `longitude`   | Longitude of the hotspot center (decimal degrees). |
+
+### Example result output
+
+```csv
+rank,crime_count,latitude,longitude
+1,1765,40.6798,-73.7763
+2,1735,40.7908,-73.8847
+3,1451,40.75,-73.9894
+```
 
 ---
 
