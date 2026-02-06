@@ -148,8 +148,6 @@ if __name__ == "__main__":
     if strategy in {"both", "greedy"}:
         counts = [cnt for cnt, _ in greedy_hotspots]
 
-    print(type(greedy_hotspots[0][1]), greedy_hotspots[0][1])
-
     # -------- save hotspot results to pickle file for this iteration --------
     if strategy in {"both", "greedy"}:
         result_csv = os.path.join(
