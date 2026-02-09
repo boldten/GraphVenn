@@ -1,0 +1,4 @@
+*.html linguist-generated
+Results/** linguist-generated
+*.csv linguist-generated
+*.gif linguist-generated
