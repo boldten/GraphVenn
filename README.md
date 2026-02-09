@@ -13,6 +13,8 @@ The result is a method that provides **provably optimal hotspot selections**, su
 
 For full details, see the article *A Globally Optimal Algorithm for Hotspot Detection and Ranking* in [*Crime Science*](????).
 
+*Below is a runtime recording showing GraphVenn detecting the top 100 hotspots from approximately 489,000 crime events in New York City (2016), with a total runtime of **9 seconds**. The resulting CSV file and interactive HTML map are available in the `Results/` folder as examples.*
+
 
 ![GraphVenn runtime demo](graphvenn_demo.gif)
 
@@ -30,7 +32,7 @@ For full details, see the article *A Globally Optimal Algorithm for Hotspot Dete
 ├── LICENSE 	               	# MIT License (see below)
 ├── Data/                      	# Input data directory (crime datasets as CSV)
 │   └── NYC_2016_crimes.csv 	# Example crime data from New York City, 489k crimes in 2016. From the CODE open crime database.
-└── Results/                   	# Output directory (CSV and HTML result files)
+└── Results/                   	# Output directory (CSV and HTML result files). Includes the result from the example execution.
 ```
 
 ---
