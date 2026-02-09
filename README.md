@@ -14,7 +14,7 @@ The result is a method that provides **provably optimal hotspot selections**, su
 For full details, see the article *A Globally Optimal Algorithm for Hotspot Detection and Ranking* in [*Crime Science*](????).
 
 
-![GraphVenn runtime demo](docs/graphvenn_demo.gif)
+![GraphVenn runtime demo](graphvenn_demo.gif)
 
 ---
 

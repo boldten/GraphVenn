@@ -95,7 +95,7 @@ if __name__ == "__main__":
     unique_position_crime_counts, all_crimes_gdf = gv.create_geodataframe( crime_data_path, False )
     pai_A = gv.calculate_area_gdf( all_crimes_gdf ) # Calculate the full study area using a rectangle that includes all crimes
     pai_a = gv.calculate_camera_area(d)               # circle area (km^2)
-    gv.print_verbose( 0, "x Study area (km^2) = {:>6}".format( round(pai_A,0) ) )    
+    gv.print_verbose( 0, "x Study area (km^2) = {:>7,}".format( int(pai_A) ) )    
 
     # ---- Save dataframes to file for later use (robust to different df shapes) ----
     out_dir = "Results/Processed"
@@ -120,11 +120,11 @@ if __name__ == "__main__":
 
     # Descriptives
     num_crimes = int(all_crimes_gdf.shape[0])
-    gv.print_verbose( 0, "x Number of crimes  = {:>6}".format( num_crimes ) )
+    gv.print_verbose( 0, "x Number of crimes  = {:>7,}".format( num_crimes ) )
     num_unique = int(unique_position_crime_counts.shape[0])
-    gv.print_verbose( 0, "x Unique positions  = {:>6}".format( num_unique ) )
+    gv.print_verbose( 0, "x Unique positions  = {:>7,}".format( num_unique ) )
     ratio = (num_crimes / num_unique) if num_unique > 0 else float('nan')
-    gv.print_verbose( 0, "x Crimes / Uniq.pos = {:>6.3f}\n".format( ratio ) )   
+    gv.print_verbose( 0, "x Crimes / Uniq.pos = {:>7.3f}\n".format( ratio ) )   
 
     # Map p to your method tag (kept for consistent printing/logging)
     run_times = []
@@ -155,6 +155,11 @@ if __name__ == "__main__":
             f"GraphVenn_result_top{N}_greedy_{city}_d={d}_p={p}.csv"
         )
         gv.save_hotspots_csv(greedy_hotspots, result_csv)
+        result_html = os.path.join(
+            results_path,
+            f"GraphVenn_result_top{N}_greedy_{city}_d={d}_p={p}.html"
+        )
+        gv.plot_hotspots_on_map( greedy_hotspots, html_path=result_html, zoom_start=13, radius_m=d )
 
     if strategy in {"both", "optimal"}:
         result_csv = os.path.join(
@@ -162,5 +167,12 @@ if __name__ == "__main__":
             f"GraphVenn_result_top{N}_optimal_{city}_d={d}_p={p}.csv"
         )
         gv.save_hotspots_csv(optimal_hotspots, result_csv)
+        result_html = os.path.join(
+            results_path,
+            f"GraphVenn_result_top{N}_optimal_{city}_d={d}_p={p}.html"
+        )
+        gv.plot_hotspots_on_map( optimal_hotspots, html_path=result_html, zoom_start=13, radius_m=d )
+    
+    print(f"  + Saved result as CSV and HTML map in directory: {results_path}")
 
     gc.collect()

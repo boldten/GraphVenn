@@ -45,7 +45,7 @@ import shutil
 import atexit
 import signal
 from pathlib import Path
-import csv
+import folium
 
 from GraphVenn_ilp import _solve_monolithic_indices, _solve_part_curve, _solve_part_select_indices
 from GraphVenn_mem import PhaseMemTracker
@@ -1040,3 +1040,142 @@ def save_hotspots_csv(hotspots, out_path):
             lat, lon = loc
             w.writerow([rank, int(count), float(lat), float(lon)])
 
+
+def plot_hotspots_on_map(hotspots, html_path, zoom_start=12, radius_m=50):
+    """
+    Write ALL hotspots to a standalone interactive Folium HTML file.
+
+    Supports:
+      - DataFrame / GeoDataFrame with columns latitude/longitude (or geometry)
+      - list of dicts
+      - list of shapely Point
+      - list of tuples in either form:
+          A) (lat, lon) or (lat, lon, ...)
+          B) (count, (lat, lon))   <-- your current format
+    """
+
+    # ---------- Normalize input ----------
+    if isinstance(hotspots, pd.DataFrame):
+        df = hotspots.copy()
+
+    elif isinstance(hotspots, list):
+        if not hotspots:
+            raise ValueError("hotspots list is empty")
+
+        first = hotspots[0]
+
+        # list of dicts
+        if isinstance(first, dict):
+            df = pd.DataFrame(hotspots)
+
+        # list of shapely Points
+        elif isinstance(first, Point):
+            df = pd.DataFrame({
+                "latitude": [p.y for p in hotspots],
+                "longitude": [p.x for p in hotspots],
+            })
+
+        # list of tuples
+        elif isinstance(first, tuple):
+            # Case B: (count, (lat, lon))
+            if (
+                len(first) == 2
+                and isinstance(first[0], (int, float))
+                and isinstance(first[1], tuple)
+                and len(first[1]) == 2
+            ):
+                df = pd.DataFrame({
+                    "total_count": [h[0] for h in hotspots],
+                    "latitude":    [h[1][0] for h in hotspots],
+                    "longitude":   [h[1][1] for h in hotspots],
+                })
+
+            # Case A: (lat, lon) or (lat, lon, ...)
+            elif len(first) >= 2 and all(isinstance(v, (int, float)) for v in first[:2]):
+                tmp = pd.DataFrame(hotspots)
+                tmp = tmp.rename(columns={0: "latitude", 1: "longitude"})
+                df = tmp
+
+            else:
+                raise TypeError(f"Unsupported tuple hotspot format. Example element: {first}")
+
+        else:
+            raise TypeError(f"Unsupported hotspot element type: {type(first)}")
+
+    else:
+        raise TypeError(f"Unsupported hotspots type: {type(hotspots)}")
+
+    # ---------- Ensure lat/lon exist ----------
+    if "geometry" in df.columns and ("latitude" not in df.columns or "longitude" not in df.columns):
+        # GeoDataFrame case
+        df["latitude"] = df.geometry.y
+        df["longitude"] = df.geometry.x
+
+    required = {"latitude", "longitude"}
+    missing = required - set(df.columns)
+    if missing:
+        raise ValueError(f"Missing required columns: {missing}. Available columns: {list(df.columns)}")
+
+    df["latitude"] = pd.to_numeric(df["latitude"])
+    df["longitude"] = pd.to_numeric(df["longitude"])
+
+    # Add rank if missing (rank 1 = highest count if count exists)
+    if "rank" not in df.columns:
+        if "total_count" in df.columns:
+            df = df.sort_values("total_count", ascending=False).reset_index(drop=True)
+        df["rank"] = df.index + 1
+
+    # ---------- Create map ----------
+    mean_lat = float(df["latitude"].mean())
+    mean_lon = float(df["longitude"].mean())
+    m = folium.Map(location=[mean_lat, mean_lon], zoom_start=zoom_start)
+
+    for _, row in df.iterrows():
+        lat, lon = float(row["latitude"]), float(row["longitude"])
+        rank = int(row["rank"])
+        cnt = row["total_count"] if "total_count" in df.columns else None
+
+        tooltip = f"Rank: {rank}"
+        if cnt is not None:
+            tooltip += f"<br>Total count: {int(cnt)}"
+
+        # circle (in meters)
+        folium.Circle(
+            location=[lat, lon],
+            radius=radius_m,
+            color="red",
+            weight=2,
+            fill=True,
+            fill_color="red",
+            fill_opacity=0.6,
+            tooltip=tooltip
+        ).add_to(m)
+
+        # rank label
+        folium.Marker(
+            location=[lat, lon],
+            icon=folium.DivIcon(
+                icon_size=(22, 22),
+                icon_anchor=(11, 11),  # center of the div
+                html=f"""
+                <div style="
+                    width: 22px;
+                    height: 22px;
+                    line-height: 22px;
+                    border-radius: 100%;
+                    text-align: center;
+                    font-size: 9pt;
+                    font-weight: bold;
+                    color: white;
+                ">
+                    {rank}
+                </div>
+                """
+            )
+        ).add_to(m)
+
+    # ---------- Save HTML ----------
+    os.makedirs(os.path.dirname(html_path) or ".", exist_ok=True)
+    m.save(html_path)
+
+    return html_path
