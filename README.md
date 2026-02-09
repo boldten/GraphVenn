@@ -1,10 +1,8 @@
 # *GraphVenn*: A Globally Optimal Algorithm for Hotspot Detection and Ranking
 
-**GraphVenn** is a Python implementation of a globally optimal crime hotspot detection and ranking method based on spatial optimization.  
-The algorithm formulates hotspot selection as a constrained optimization problem and solves it using integer linear programming (ILP), ensuring optimal solutions under the specified model assumptions. However, it also supports a fast greedy approximate hotspot detection strategy.
+**GraphVenn** is a Python implementation of a globally optimal crime hotspot detection and ranking method based on spatial optimization. The algorithm formulates hotspot selection as a constrained optimization problem and solves it using integer linear programming (ILP), ensuring optimal solutions under the specified model assumptions. However, it also supports a fast greedy approximate hotspot detection strategy.
 
-GraphVenn operates on *unique spatial locations* (aggregated latitude–longitude coordinates) rather than individual crime events.  
-This representation substantially reduces problem size while preserving exact crime counts per location, enabling scalable analysis on large urban datasets.
+GraphVenn operates on *unique spatial locations* (aggregated latitude–longitude coordinates) rather than individual crime events. This representation substantially reduces problem size while preserving exact crime counts per location, enabling scalable analysis on large urban datasets.
 
 To improve efficiency, GraphVenn combines:
 - spatial preprocessing and pruning,
@@ -15,7 +13,8 @@ The result is a method that provides **provably optimal hotspot selections**, su
 
 For full details, see the article *A Globally Optimal Algorithm for Hotspot Detection and Ranking* in [*Crime Science*](????).
 
-![Conceptual example of Venn-based hotspot detection given three crime locations.](Figure-Grid-intersections_v2.png)
+
+![GraphVenn runtime demo](docs/graphvenn_demo.gif)
 
 ---
 
@@ -30,8 +29,8 @@ For full details, see the article *A Globally Optimal Algorithm for Hotspot Dete
 ├── GraphVenn_bloom.py     		# Compact Bloom-filter–based dominance prechecks for pruning candidates
 ├── LICENSE 	               	# MIT License (see below)
 ├── Data/                      	# Input data directory (crime datasets as CSV)
-│   └── Example_crime_data.csv 	# Example crime data (with random noise added)
-└── Results/                   	# Output directory (pickled graphs, results CSVs)
+│   └── NYC_2016_crimes.csv 	# Example crime data from New York City, 489k crimes in 2016. From the CODE open crime database.
+└── Results/                   	# Output directory (CSV and HTML result files)
 ```
 
 ---
@@ -94,26 +93,26 @@ python GraphVenn.py --csv <path_to_csv_file> --city <city_name> [other options..
 Run with default values and synthetic example data in directory ./Data:
 
 ```bash
-python GraphVenn.py --csv Data/Example_crime_data.csv --city Malmoe
+python GraphVenn.py --csv Data/NYC_2016_crimes.csv --city NYC
 ```
 
 Run on the same data but for 100 hotspots (N), 50m radius (d), a spatial resolution of 4 decimals (p), and again the 'greedy' detection strategy.
 
 ```bash
-python GraphVenn.py --csv Data/Example_crime_data.csv --city Malmoe --N 100 --d 50 --p 4 --strategy='greedy'
+python GraphVenn.py --csv Data/NYC_2016_crimes.csv --city NYC --N 100 --d 50 --p 4 --strategy='greedy'
 ```
 
 Run on the same data but for 50 hotspots (N), 100m radius (d), a spatial resolution of 4 decimals (p), but now with the 'optimal' detection strategy relying on ILP.
 
 ```bash
-python GraphVenn.py --csv Data/Example_crime_data.csv --city Malmoe --N 50 --d 100 --p 4 --strategy='optimal'
+python GraphVenn.py --csv Data/NYC_2016_crimes.csv --city NYC --N 50 --d 100 --p 4 --strategy='optimal'
 ```
 
 ---
 
 ## Data input
 
-The program takes one argument that should be the path to a CSV file, comma (,)separated, containing the crime data to analyze. The columns in the CSV should be named:
+The program takes one argument that should be the path to a CSV file, comma (,) separated, containing the crime data to analyze. The columns in the CSV should be named:
 - crime_code: integer values representing the type of crime. In the example crime data file it is set to a dummy value (99) for all crimes.
 - year: integer values representing the year when the crime occurred, e.g., 2025
 - latitude:  floating point values representing latitude coordinates, e.g., 55.6050 (note the dot, not a comma)
@@ -123,11 +122,15 @@ The program takes one argument that should be the path to a CSV file, comma (,)s
 
 ## Output format
 
-GraphVenn stores detected hotspot results as CSV files in the `Results/` directory.
+GraphVenn stores detected hotspot results as a **CSV file** and an **interactive HTML map** in the `Results/` directory.
 
-Each row corresponds to *one hotspot candidate*, in descending order:
-- Row 1 contains the *best-ranked* hotspot.
+Each CSV row corresponds to **one hotspot candidate**, ordered by descending priority:
+- **Row 1** contains the *best-ranked* hotspot.
 - Subsequent rows list hotspots in decreasing order of importance.
+
+Each row includes the hotspot's **rank**, its **crime count** (with crimes assigned so they are not double-counted across hotspots), and the hotspot center **latitude/longitude** coordinates.
+
+The interactive map allows zooming and panning to inspect hotspot locations. It is generated using **OpenStreetMap** tiles via the **Folium** package.
 
 ### CSV columns
 
