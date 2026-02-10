@@ -85,7 +85,7 @@ python GraphVenn.py --csv <path_to_csv_file> --city <city_name> [other options..
 | Argument             | Default   | Description 
 |----------------------|-----------|-------------
 | `--strategy`		   | `'greedy'`| Search strategy, either `'greedy'` or `'optimal'`.
-| `--N` 			   | `100`     | Only consider top N positions with most crimes.
+| `--N` 			   | `100`     | Return the top N hotspots ranked by associated crime count.
 | `--d`    			   | `100`     | Hotspot radius in meters.
 | `--p`			       | `4`       | Spatial resolution in terms of number of coordinate decimals.
 | `--min_cluster_size` | `1`       | Minimum number of crimes required at a location to be considered.
