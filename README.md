@@ -1,6 +1,6 @@
 # *GraphVenn*: A Globally Optimal Algorithm for Hotspot Detection and Ranking
 
-**GraphVenn** is a Python implementation of a globally optimal crime hotspot detection and ranking method based on spatial optimization. The algorithm formulates hotspot selection as a constrained optimization problem and solves it using integer linear programming (ILP), ensuring optimal solutions under the specified model assumptions. However, it also supports a fast greedy approximate hotspot detection strategy.
+**GraphVenn** is a Python implementation of an efficient crime hotspot detection and ranking algorithm based on spatial optimization. It formulates hotspot selection as a constrained optimization problem and solves it using integer linear programming (ILP), ensuring globally optimal solutions under the specified model assumptions. In addition, it offers a highly efficient near-optimal greedy alternative for scenarios where faster approximate solutions are preferred.
 
 GraphVenn operates on *unique spatial locations* (aggregated latitude–longitude coordinates) rather than individual crime events. This representation substantially reduces problem size while preserving exact crime counts per location, enabling scalable analysis on large urban datasets.
 
