@@ -832,7 +832,7 @@ def run_graphvenn_method(unique_position_crime_counts, current_max_camera_covera
         #print(f"  + Phase-1 graph components: {len(graph_components):,} (total nodes={tot:,})")
         sizes = np.array([len(c) for c in graph_components], dtype=np.int32)
         print(
-            f"  + Phase-1 graph components: {len(sizes):,} (total nodes={sizes.sum():,}) | "
+            f"  + Created graph with {len(sizes):,} components (total nodes: {sizes.sum():,}) | "
             f"min={sizes.min()}, p50={int(np.median(sizes))}, p90={int(np.quantile(sizes,0.9))}, "
             f"p99={int(np.quantile(sizes,0.99))}, max={sizes.max()}"
         )
