@@ -529,7 +529,7 @@ def OptimizeHotspots(H, N, d, all_crimes_gdf, min_hotspot_size, strategy='greedy
         if covA.size == 0: return True
         if covB.size == 0: return False
         a = np.sort(covA); b = np.sort(covB)
-        return np.in1d(a, b, assume_unique=False).all()
+        return np.isin(a, b, assume_unique=False).all()
 
 
     # prune only if even the 2d upper bound is below the minimum hotspot size
