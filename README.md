@@ -11,9 +11,9 @@ To improve efficiency, GraphVenn combines:
 
 The result is a method that provides **provably optimal hotspot selections**, suitable for research and comparative evaluation of hotspot detection strategies.
 
-For full details, see the article *A Globally Optimal Algorithm for Hotspot Detection and Ranking* in [*Crime Science*](????).
+For full details, see the article *A Globally Optimal Algorithm for Hotspot Detection and Ranking* in [*Crime Science*](https://link.springer.com/article/10.1186/s40163-026-00269-x).
 
-*Below is a runtime recording showing GraphVenn detecting the top 100 hotspots from approximately 489,000 crime events in New York City (2016), with a total runtime of **9 seconds**. The resulting CSV file and interactive HTML map are available in the `Results/` folder as examples. To view the map, download the HTML file and open it locally in a web browser.*
+*Below is a runtime recording showing GraphVenn detecting the top 100 hotspots from approximately 489,000 crime events in New York City (2016), with a runtime of **9 seconds**. The resulting CSV file and interactive HTML map are available in the `Results/` folder as examples. To view the map, download the HTML file and open it locally in a web browser.*
 
 ![GraphVenn runtime demo](graphvenn_demo.gif)
 
@@ -36,7 +36,14 @@ For full details, see the article *A Globally Optimal Algorithm for Hotspot Dete
 
 ---
 
-## Requirements
+## Installation
+
+Start by cloning the project to your computer by running the following command in the command line:
+
+```bash
+git clone https://github.com/boldten/GraphVenn.git
+cd GraphVenn
+```
 
 ### Python dependencies
 - numpy
@@ -46,10 +53,10 @@ For full details, see the article *A Globally Optimal Algorithm for Hotspot Dete
 - psutil
 - pulp
 
-Install via:
+Install the required Python packages:
 
 ```bash
-pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 ```
 
 ### System dependencies
@@ -65,6 +72,14 @@ Or in *macOS* using Homebrew:
 brew install cbc
 ```
 
+To verify that CBC is correctly installed, run:
+
+```bash
+cbc -stop
+```
+
+If installed correctly, this command will print the CBC version.
+
 ---
 
 ## Usage
@@ -72,7 +87,7 @@ brew install cbc
 Run GraphVenn from the command line with the required arguments `--csv` and `--city`, and optionally override default parameters:
 
 ```bash
-python GraphVenn.py --csv <path_to_csv_file> --city <city_name> [other options...]
+python3 GraphVenn.py --csv <path_to_csv_file> --city <city_name> [other options...]
 ```
 
 ### Required Arguments
@@ -91,22 +106,22 @@ python GraphVenn.py --csv <path_to_csv_file> --city <city_name> [other options..
 | `--min_cluster_size` | `1`       | Minimum number of crimes required at a location to be considered.
 | `--verbose`          | `1`       | Verbosity level: `0` = minimal, `1` = progress info, `2` = debug details.
 
-Run with default values and synthetic example data in directory ./Data:
+Run with default values and example data in directory ./Data:
 
 ```bash
-python GraphVenn.py --csv Data/NYC_2016_crimes.csv --city NYC
+python3 GraphVenn.py --csv Data/NYC_2016_crimes.csv --city NYC
 ```
 
 Run on the same data but for 100 hotspots (N), 50m radius (d), a spatial resolution of 4 decimals (p), and again the 'greedy' detection strategy.
 
 ```bash
-python GraphVenn.py --csv Data/NYC_2016_crimes.csv --city NYC --N 100 --d 50 --p 4 --strategy='greedy'
+python3 GraphVenn.py --csv Data/NYC_2016_crimes.csv --city NYC --N 100 --d 50 --p 4 --strategy='greedy'
 ```
 
 Run on the same data but for 50 hotspots (N), 100m radius (d), a spatial resolution of 4 decimals (p), but now with the 'optimal' detection strategy relying on ILP.
 
 ```bash
-python GraphVenn.py --csv Data/NYC_2016_crimes.csv --city NYC --N 50 --d 100 --p 4 --strategy='optimal'
+python3 GraphVenn.py --csv Data/NYC_2016_crimes.csv --city NYC --N 50 --d 100 --p 4 --strategy='optimal'
 ```
 
 ---
@@ -167,18 +182,18 @@ This project is licensed under the MIT License – see the [LICENSE](LICENSE) fi
 
 If you use GraphVenn in your work, please cite the following publication:
 
-> Boldt, M. (2026). *A Globally Optimal Algorithm for Hotspot Detection and Ranking*. *Crime Science*, 1-?. [???https://doi.org/10.1007/s10940-025-09623-9](???https://doi.org/10.1007/s10940-025-09623-9)
+> Boldt, M. (2026). *A Globally Optimal Algorithm for Hotspot Detection and Ranking*. *Crime Science*, 1-17. [https://doi.org/10.1186/s40163-026-00269-x](https://https://doi.org/10.1186/s40163-026-00269-x)
 
 BibTeX:
 ```bibtex
 @article{boldt2026graphvenn,
 author = {Boldt, Martin},
-doi = {???},
+doi = {10.1186/s40163-026-00269-x},
 journal = {Crime Science},
 month = dec,
 title = {{A Globally Optimal Algorithm for Hotspot Detection and Ranking}},
-pages = {1-??},
-url = {???},
+pages = {1-17},
+url = {https://doi.org/10.1186/s40163-026-00269-x},
 year = {2026}
 }
 ```
