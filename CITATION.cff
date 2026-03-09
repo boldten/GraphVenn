@@ -13,13 +13,13 @@ authors:
 preferred-citation:
   type: article
   title: "A Globally Optimal Algorithm for Hotspot Detection and Ranking"
-  doi: ???? 10.1007/s10940-025-09623-9
-  url: ???? https://link.springer.com/article/10.1007/s10940-025-09623-9
+  doi: 10.1186/s40163-026-00269-x
+  url: https://doi.org/10.1186/s40163-026-00269-x
   date-published: ??? 2025-07-30
   journal: Crime Science
   # volume:  (add if known)
   # issue:   (add if known)
-  pages: ???? 1-32
+  pages: 1-17
   authors:
     - family-names: Boldt
       given-names: Martin
