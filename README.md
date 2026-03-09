@@ -51,6 +51,11 @@ cd GraphVenn
 - geopandas
 - shapely
 - psutil
+- networkx
+- haversine
+- scipy
+- scikit-learn
+- folium
 - pulp
 
 Install the required Python packages:
