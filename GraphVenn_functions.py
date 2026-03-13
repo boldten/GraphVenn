@@ -353,7 +353,7 @@ def OptimizeHotspots(H, N, d, all_crimes_gdf, min_hotspot_size, strategy='greedy
     N: number to select
     d: radius (meters)
     all_crimes_gdf: incidents (Point) in any CRS (will be converted)
-    min_hotspot_size: minimum crime incidents that must exist to form a hotspot (default 1)
+    min_hotspot_size: minimum crime incidents that must exist to form a hotspot (default 2)
     strategy: search strategy (default 'greedy')
     ...
     Returns (optimal_hotspots, greedy_hotspots) each sorted by unique count desc.
@@ -470,7 +470,8 @@ def OptimizeHotspots(H, N, d, all_crimes_gdf, min_hotspot_size, strategy='greedy
         greedy_sorted, _ = assign_unique_counts_with_priority(
             greedy_sel_idx, H, L, get_cov, weights, priority=greedy_sel_idx
         )
-        greedy_hotspots = [(c, ll) for (c, ll, _) in greedy_sorted]
+        greedy_hotspots = [(c, ll) for (c, ll, _) in greedy_sorted if c >= min_hotspot_size]
+
         greedy_unique_total = sum(c for (c, _) in greedy_hotspots)
         k = min(10, len(greedy_hotspots))
         print(f"  + Selected {len(greedy_hotspots)} hotspots (strategy='greedy').")
@@ -741,7 +742,8 @@ def OptimizeHotspots(H, N, d, all_crimes_gdf, min_hotspot_size, strategy='greedy
         sys.stdout.write(f" Done ({time.time()-t_start:.2f}s)\n")
 
     optimal_sorted, _ = assign_unique_counts_with_priority(all_selected, H2, L, get_cov2, weights, priority="standalone_desc")
-    optimal_hotspots = [(c, ll) for (c, ll, _) in optimal_sorted]
+    optimal_hotspots = [(c, ll) for (c, ll, _) in optimal_sorted if c >= min_hotspot_size]
+
     _print_optimal_summary(optimal_hotspots, [H2[i][0] for i in all_selected])
 
     stop_mem("optimal")
@@ -751,7 +753,7 @@ def OptimizeHotspots(H, N, d, all_crimes_gdf, min_hotspot_size, strategy='greedy
 
 # --------------------------- GraphVenn front-end ---------------------------
 
-def run_graphvenn_method(unique_position_crime_counts, current_max_camera_coverage, spatial_resolution, N, all_crimes_gdf, min_hotspot_size=1, strategy="both"):
+def run_graphvenn_method(unique_position_crime_counts, current_max_camera_coverage, spatial_resolution, N, all_crimes_gdf, min_hotspot_size=2, strategy="both"):
     """
     GraphVenn front-end: generates candidate hotspot centers by snapped p-grid
     around each unique crime location, caches only counts per grid cell,

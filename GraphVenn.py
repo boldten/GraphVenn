@@ -51,7 +51,7 @@ if __name__ == "__main__":
     parser.add_argument("--N", type=int, default=100, help="Number of hotspots to detect. When using strategy='optimal' then generally keep N at 100 or lower. For 'greedy' it can be higher.")
     parser.add_argument("--d", type=int, default=100, help="Max allowed crime distance (in meters) from hotspot centers, default = 100")
     parser.add_argument("--p", type=int, default=4, help="Spatial resolution as number of decimals in Lon/Lat coordinates to use, generally keep at 4 or lower.")
-    parser.add_argument("--min_hotspot_count", type=int, default=1, help="Minimum number of crimes that must be included in a potential hotspot.")
+    parser.add_argument("--min_hotspot_count", type=int, default=2, help="Minimum number of crimes that must be included in a potential hotspot.")
     parser.add_argument("--verbose", type=int, choices=[0, 1, 2], default=1, help="Verbosity level: 0=Basic, 1=Progress, 2=Debug")
 
     args = parser.parse_args()
