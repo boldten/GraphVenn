@@ -108,7 +108,7 @@ python3 GraphVenn.py --csv <path_to_csv_file> --city <city_name> [other options.
 | `--N` 			   | `100`     | Return the top N hotspots ranked by associated crime count.
 | `--d`    			   | `100`     | Hotspot radius in meters.
 | `--p`			       | `4`       | Spatial resolution in terms of number of coordinate decimals.
-| `--min_cluster_size` | `2`       | Minimum number of crimes required at a location to be considered.
+| `--min_hotspot_count` | `2`       | Minimum number of crimes required at a location to be considered.
 | `--verbose`          | `1`       | Verbosity level: `0` = minimal, `1` = progress info, `2` = debug details.
 
 Run with default values and example data in directory ./Data:
