@@ -108,7 +108,7 @@ python3 GraphVenn.py --csv <path_to_csv_file> --city <city_name> [other options.
 | `--N` 			   | `100`     | Return the top N hotspots ranked by associated crime count.
 | `--d`    			   | `100`     | Hotspot radius in meters.
 | `--p`			       | `4`       | Spatial resolution in terms of number of coordinate decimals.
-| `--min_cluster_size` | `1`       | Minimum number of crimes required at a location to be considered.
+| `--min_cluster_size` | `2`       | Minimum number of crimes required at a location to be considered.
 | `--verbose`          | `1`       | Verbosity level: `0` = minimal, `1` = progress info, `2` = debug details.
 
 Run with default values and example data in directory ./Data:
@@ -187,7 +187,7 @@ This project is licensed under the MIT License – see the [LICENSE](LICENSE) fi
 
 If you use GraphVenn in your work, please cite the following publication:
 
-> Boldt, M. (2026). *A Globally Optimal Algorithm for Hotspot Detection and Ranking*. *Crime Science*, 1-17. [https://doi.org/10.1186/s40163-026-00269-x](https://https://doi.org/10.1186/s40163-026-00269-x)
+> Boldt, M. (2026). *A Globally Optimal Algorithm for Hotspot Detection and Ranking*. *Crime Science*, 1-17. DOI: [10.1186/s40163-026-00269-x](https://link.springer.com/article/10.1186/s40163-026-00269-x)
 
 BibTeX:
 ```bibtex
@@ -198,7 +198,7 @@ journal = {Crime Science},
 month = dec,
 title = {{A Globally Optimal Algorithm for Hotspot Detection and Ranking}},
 pages = {1-17},
-url = {https://doi.org/10.1186/s40163-026-00269-x},
+url = {https://link.springer.com/article/10.1186/s40163-026-00269-x,
 year = {2026}
 }
 ```
