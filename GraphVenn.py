@@ -150,28 +150,46 @@ if __name__ == "__main__":
 
     # -------- save hotspot results to pickle file for this iteration --------
     if strategy in {"both", "greedy"}:
+        # Create dataframe, and rank all hotspots
+        greedy_hotspots_df = gv.create_dataframe_from_locations_list(greedy_hotspots)
+        if "total_count" in greedy_hotspots_df.columns:
+            greedy_hotspots_df = greedy_hotspots_df.sort_values("total_count", ascending=False).reset_index(drop=True)
+            greedy_hotspots_df["rank"] = greedy_hotspots_df["total_count"].rank(ascending=False, method="min").astype("Int64")
+
+        # Save hotspots to csv
         result_csv = os.path.join(
             results_path,
             f"GraphVenn_result_top{N}_greedy_{city}_d={d}_p={p}.csv"
         )
-        gv.save_hotspots_csv(greedy_hotspots, result_csv)
+        greedy_hotspots_df[['rank','total_count','latitude','longitude']].to_csv(result_csv, header=['rank','crime_count','latitude','longitude'], index=False)
+
+        # Plot hotspots on html map
         result_html = os.path.join(
             results_path,
             f"GraphVenn_result_top{N}_greedy_{city}_d={d}_p={p}.html"
         )
-        gv.plot_hotspots_on_map( greedy_hotspots, html_path=result_html, zoom_start=13, radius_m=d )
+        gv.plot_hotspots_on_map( greedy_hotspots_df, html_path=result_html, zoom_start=13, radius_m=d )
 
     if strategy in {"both", "optimal"}:
+        # Create dataframe, and rank all hotspots
+        optimal_hotspots_df = gv.create_dataframe_from_locations_list(optimal_hotspots)
+        if "total_count" in optimal_hotspots_df.columns:
+            optimal_hotspots_df = optimal_hotspots_df.sort_values("total_count", ascending=False).reset_index(drop=True)
+            optimal_hotspots_df["rank"] = optimal_hotspots_df["total_count"].rank(ascending=False, method="min").astype("Int64")
+
+        # Save hotspots to csv
         result_csv = os.path.join(
             results_path,
             f"GraphVenn_result_top{N}_optimal_{city}_d={d}_p={p}.csv"
         )
-        gv.save_hotspots_csv(optimal_hotspots, result_csv)
+        optimal_hotspots_df[['rank','total_count','latitude','longitude']].to_csv(result_csv, header=['rank','crime_count','latitude','longitude'], index=False)
+
+        # Plot hotspots on html map
         result_html = os.path.join(
             results_path,
             f"GraphVenn_result_top{N}_optimal_{city}_d={d}_p={p}.html"
         )
-        gv.plot_hotspots_on_map( optimal_hotspots, html_path=result_html, zoom_start=13, radius_m=d )
+        gv.plot_hotspots_on_map( optimal_hotspots_df, html_path=result_html, zoom_start=13, radius_m=d )
     
     print(f"  + Saved result as CSV and HTML map in directory: {results_path}")
 

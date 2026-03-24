@@ -1024,39 +1024,7 @@ def run_graphvenn_method(unique_position_crime_counts, current_max_camera_covera
    
     return optimal_hotspots, greedy_hotspots, timings
 
-def save_hotspots_csv(hotspots, out_path):
-    """
-    Save hotspots to CSV.
-    hotspots: list of (count, (lat, lon)) in ranked order (best first).
-    """
-    import csv
-
-    with open(out_path, "w", newline="") as f:
-        w = csv.writer(f)
-        w.writerow(["rank", "crime_count", "latitude", "longitude"])
-
-        for rank, (count, loc) in enumerate(hotspots, start=1):
-            if not (isinstance(loc, tuple) and len(loc) == 2):
-                raise ValueError(f"Expected (lat, lon) tuple, got: {type(loc)} {loc}")
-
-            lat, lon = loc
-            w.writerow([rank, int(count), float(lat), float(lon)])
-
-
-def plot_hotspots_on_map(hotspots, html_path, zoom_start=12, radius_m=50):
-    """
-    Write ALL hotspots to a standalone interactive Folium HTML file.
-
-    Supports:
-      - DataFrame / GeoDataFrame with columns latitude/longitude (or geometry)
-      - list of dicts
-      - list of shapely Point
-      - list of tuples in either form:
-          A) (lat, lon) or (lat, lon, ...)
-          B) (count, (lat, lon))   <-- your current format
-    """
-
-    # ---------- Normalize input ----------
+def create_dataframe_from_locations_list(hotspots):
     if isinstance(hotspots, pd.DataFrame):
         df = hotspots.copy()
 
@@ -1120,13 +1088,20 @@ def plot_hotspots_on_map(hotspots, html_path, zoom_start=12, radius_m=50):
 
     df["latitude"] = pd.to_numeric(df["latitude"])
     df["longitude"] = pd.to_numeric(df["longitude"])
+    return df
 
-    # Add rank if missing (rank 1 = highest count if count exists)
-    if "rank" not in df.columns:
-        if "total_count" in df.columns:
-            df = df.sort_values("total_count", ascending=False).reset_index(drop=True)
-        df["rank"] = df.index + 1
+def plot_hotspots_on_map(df, html_path, zoom_start=12, radius_m=50):
+    """
+    Write ALL hotspots to a standalone interactive Folium HTML file.
 
+    Supports:
+      - DataFrame / GeoDataFrame with columns latitude/longitude (or geometry)
+      - list of dicts
+      - list of shapely Point
+      - list of tuples in either form:
+          A) (lat, lon) or (lat, lon, ...)
+          B) (count, (lat, lon))   <-- your current format
+    """
     # ---------- Create map ----------
     mean_lat = float(df["latitude"].mean())
     mean_lon = float(df["longitude"].mean())
