@@ -187,7 +187,7 @@ This project is licensed under the MIT License – see the [LICENSE](LICENSE) fi
 
 If you use GraphVenn in your work, please cite the following publication:
 
-> Boldt, M. (2026). *A Globally Optimal Algorithm for Hotspot Detection and Ranking*. *Crime Science*, 1-17. DOI: [10.1186/s40163-026-00269-x](https://link.springer.com/article/10.1186/s40163-026-00269-x)
+> Boldt, M. (2026). A Globally Optimal Algorithm for Hotspot Detection and Ranking. *Crime Science*, **15**(7), 1-17. DOI: [10.1186/s40163-026-00269-x](https://link.springer.com/article/10.1186/s40163-026-00269-x)
 
 BibTeX:
 ```bibtex
