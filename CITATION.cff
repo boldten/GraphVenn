@@ -15,10 +15,10 @@ preferred-citation:
   title: "A Globally Optimal Algorithm for Hotspot Detection and Ranking"
   doi: 10.1186/s40163-026-00269-x
   url: https://doi.org/10.1186/s40163-026-00269-x
-  date-published: ??? 2025-07-30
+  date-published: 2026-02-21
   journal: Crime Science
-  # volume:  (add if known)
-  # issue:   (add if known)
+  volume: 15
+  issue: 7
   pages: 1-17
   authors:
     - family-names: Boldt
